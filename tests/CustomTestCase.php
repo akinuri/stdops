@@ -14,10 +14,17 @@ class CustomTestCase extends TestCase
             $result = $callback(...$case["args"]);
             if ($case["compare"] ?? null) {
                 $this->assertTrue(
-                    $case["compare"]($result, $case["expected"]),
+                    $case["compare"](
+                        $result,
+                        $case["expected"] ?? null,
+                        $case["args"],
+                    ),
                     $caseName,
                 );
             } else {
+                if (!array_key_exists("expected", $case)) {
+                    throw new Exception("Expected value is required.");
+                }
                 $this->assertSame($case["expected"], $result, $caseName);
             }
         }
