@@ -11,21 +11,45 @@ class CustomTestCase extends TestCase
             if ($case["name"] ?? null) {
                 $caseName .= ", Name: {$case["name"]}";
             }
-            $result = $callback(...$case["args"]);
-            if ($case["compare"] ?? null) {
-                $this->assertTrue(
-                    $case["compare"](
-                        $result,
-                        $case["expected"] ?? null,
-                        $case["args"],
-                    ),
-                    $caseName,
-                );
-            } else {
-                if (!array_key_exists("expected", $case)) {
-                    throw new Exception("Expected value is required.");
+            if ($case["throws"] ?? null) {
+                $thrown = false;
+                $result = undefined;
+                try {
+                    $result = $callback(...$case["args"]);
+                } catch (Throwable $th) {
+                    $thrown = true;
                 }
-                $this->assertSame($case["expected"], $result, $caseName);
+                if ($thrown) {
+                    $this->assertTrue($thrown, "success");
+                } else {
+                    $this->fail(
+                        sprintf(
+                            "%s\nResult: %s\n%s",
+                            $caseName,
+                            $result === null
+                                ? "null"
+                                : ($result === false ? "false" : (string) $result),
+                            "Expected exception was not thrown.",
+                        )
+                    );
+                }
+            } else {
+                $result = $callback(...$case["args"]);
+                if ($case["compare"] ?? null) {
+                    $this->assertTrue(
+                        $case["compare"](
+                            $result,
+                            $case["expected"] ?? null,
+                            $case["args"]
+                        ),
+                        $caseName,
+                    );
+                } else {
+                    if (!array_key_exists("expected", $case)) {
+                        throw new Exception("Expected value is required.");
+                    }
+                    $this->assertSame($case["expected"], $result, $caseName);
+                }
             }
         }
     }
