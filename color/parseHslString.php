@@ -24,21 +24,23 @@
 function parseHslString(string $hslString): array
 {
     $isLegacy = str_contains($hslString, ",");
-    if ($isLegacy) {
-        $match = preg_match(
-            "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*,\s*(\d+)%?\s*,\s*(\d+)%?(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i",
-            $hslString,
-            $matches
-        );
-    } else {
-        $match = preg_match(
-            "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*(\d+)%?\s*(\d+)%?\s*(?:\/\s*(\d+)%?)?\s*\)$/i",
-            $hslString,
-            $matches
-        );
-    }
-    if (!$match) {
-        throw new \InvalidArgumentException("Invalid HSL color format: $hslString");
+    validateMatch: {
+        if ($isLegacy) {
+            $match = preg_match(
+                "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*,\s*(\d+)%?\s*,\s*(\d+)%?(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i",
+                $hslString,
+                $matches
+            );
+        } else {
+            $match = preg_match(
+                "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*(\d+)%?\s*(\d+)%?\s*(?:\/\s*(\d+)%?)?\s*\)$/i",
+                $hslString,
+                $matches
+            );
+        }
+        if (!$match) {
+            throw new \InvalidArgumentException("Invalid HSL color format: $hslString");
+        }
     }
     $hue = intval($matches[1]);
     $sat = intval($matches[2]);
@@ -47,17 +49,19 @@ function parseHslString(string $hslString): array
     if (!$isLegacy) {
         $alpha /= 100;
     }
-    if (!(0 <= $hue && $hue <= 360)) {
-        throw new \InvalidArgumentException("Hue value out of range: $hue");
-    }
-    if (!(0 <= $sat && $sat <= 100)) {
-        throw new \InvalidArgumentException("Saturation value out of range: $sat");
-    }
-    if (!(0 <= $lum && $lum <= 100)) {
-        throw new \InvalidArgumentException("Lightness value out of range: $lum");
-    }
-    if (!(0 <= $alpha && $alpha <= 1)) {
-        throw new \InvalidArgumentException("Alpha value out of range: $alpha");
+    validateValues: {
+        if (!(0 <= $hue && $hue <= 360)) {
+            throw new \InvalidArgumentException("Hue value out of range: $hue");
+        }
+        if (!(0 <= $sat && $sat <= 100)) {
+            throw new \InvalidArgumentException("Saturation value out of range: $sat");
+        }
+        if (!(0 <= $lum && $lum <= 100)) {
+            throw new \InvalidArgumentException("Lightness value out of range: $lum");
+        }
+        if (!(0 <= $alpha && $alpha <= 1)) {
+            throw new \InvalidArgumentException("Alpha value out of range: $alpha");
+        }
     }
     return [
         "hue" => $hue,
