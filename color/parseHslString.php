@@ -25,9 +25,17 @@ function parseHslString(string $hslString): array
 {
     $isLegacy = str_contains($hslString, ",");
     if ($isLegacy) {
-        $match = preg_match("/^hsl[a]?\(\s*([0-9]+)(?:deg)?\s*,\s*([0-9]+)%?\s*,\s*([0-9]+)%?(?:\s*,\s*(0|1|0\.\d+))?\s*\)$/", $hslString, $matches);
+        $match = preg_match(
+            "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*,\s*(\d+)%?\s*,\s*(\d+)%?(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i",
+            $hslString,
+            $matches
+        );
     } else {
-        $match = preg_match("/^hsl[a]?\(\s*([0-9]+)(?:deg)?\s*([0-9]+)%?\s*([0-9]+)%?\s*(?:\/\s*([0-9]+)%?)?\s*\)$/", $hslString, $matches);
+        $match = preg_match(
+            "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*(\d+)%?\s*(\d+)%?\s*(?:\/\s*(\d+)%?)?\s*\)$/i",
+            $hslString,
+            $matches
+        );
     }
     if (!$match) {
         throw new \InvalidArgumentException("Invalid HSL color format: $hslString");
