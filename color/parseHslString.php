@@ -36,6 +36,9 @@ function parseHslString(string $hslString): array
     $sat = intval($matches[2]);
     $lum = intval($matches[3]);
     $alpha = floatval($matches[4] ?? ($isLegacy ? "1" : "100"));
+    if (!$isLegacy) {
+        $alpha /= 100;
+    }
     if (!(0 <= $hue && $hue <= 360)) {
         throw new \InvalidArgumentException("Hue value out of range: $hue");
     }
@@ -45,19 +48,13 @@ function parseHslString(string $hslString): array
     if (!(0 <= $lum && $lum <= 100)) {
         throw new \InvalidArgumentException("Lightness value out of range: $lum");
     }
-    if ($isLegacy) {
-        if (!(0 <= $alpha && $alpha <= 1)) {
-            throw new \InvalidArgumentException("Alpha value out of range: $alpha");
-        }
-    } else {
-        if (!(0 <= $alpha && $alpha <= 100)) {
-            throw new \InvalidArgumentException("Alpha value out of range: $alpha");
-        }
+    if (!(0 <= $alpha && $alpha <= 1)) {
+        throw new \InvalidArgumentException("Alpha value out of range: $alpha");
     }
     return [
         "hue" => $hue,
         "sat" => $sat,
         "lum" => $lum,
-        "alpha" => $alpha,
+        "alpha" => round($alpha, 3),
     ];
 }
