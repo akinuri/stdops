@@ -6,6 +6,7 @@ use PHPUnit\Framework\Attributes\TestDox;
 
 include __DIR__ . "/../color/parseHslString.php";
 include __DIR__ . "/../color/buildHslString.php";
+include __DIR__ . "/../color/hslOps.php";
 
 final class ColorTest extends CustomTestCase
 {
@@ -240,7 +241,8 @@ final class ColorTest extends CustomTestCase
     }
 
     #[TestDox("parseHslString()")]
-    public function test_buildHslString(): void {
+    public function test_buildHslString(): void
+    {
         $cases = [
             [
                 "name" => "no arg",
@@ -288,5 +290,49 @@ final class ColorTest extends CustomTestCase
             ],
         ];
         $this->handleCases($cases, "buildHslString");
+    }
+
+    #[TestDox("hslSet()")]
+    public function test_hslSet(): void
+    {
+        $cases = [
+            [
+                "name" => "no arg",
+                "args" => [],
+                "throws" => ArgumentCountError::class,
+            ],
+            [
+                "name" => "invalid arg",
+                "args" => [123],
+                "throws" => TypeError::class,
+            ],
+            // [
+            //     "name" => "empty array",
+            //     "args" => [[]],
+            //     "throws" => InvalidArgumentException::class,
+            // ],
+            // [
+            //     "name" => "unexpected array",
+            //     "args" => [["lorem" => "ipsum"]],
+            //     "throws" => InvalidArgumentException::class,
+            // ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "hue" => 45],
+                "expected" => [
+                    "hue" => 45,
+                    "sat" => 50,
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "sat" => 90],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 90,
+                    "lum" => 75,
+                ],
+            ],
+        ];
+        $this->handleCases($cases, "hslSet");
     }
 }
