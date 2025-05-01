@@ -12,15 +12,22 @@ class CustomTestCase extends TestCase
                 $caseName .= ", Name: {$case["name"]}";
             }
             if ($case["throws"] ?? null) {
+                $throws = $case["throws"];
                 $thrown = false;
                 $result = undefined;
+                $exception = null;
                 try {
                     $result = $callback(...$case["args"]);
                 } catch (Throwable $th) {
+                    $exception = $th;
                     $thrown = true;
                 }
                 if ($thrown) {
-                    $this->assertTrue($thrown, "success");
+                    if ($throws === true) {
+                        $this->assertTrue($thrown, "success");
+                    } else {
+                        $this->assertSame($throws, $exception::class, $caseName);
+                    }
                 } else {
                     $this->fail(
                         sprintf(
