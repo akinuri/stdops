@@ -41,7 +41,14 @@ class CustomTestCase extends TestCase
                     );
                 }
             } else {
-                $result = $callback(...$case["args"]);
+                try {
+                    $result = $callback(...$case["args"]);
+                } catch (\Throwable $th) {
+                    $this->assertTrue(
+                        false,
+                        $caseName . sprintf(" (%s)", $th->getMessage()),
+                    );
+                }
                 if ($case["compare"] ?? null) {
                     $this->assertTrue(
                         $case["compare"](
