@@ -84,14 +84,18 @@ function hslMul(
 
 function hslClamp(array $hsl): array
 {
-    if (!isValidHslArray($hsl)) {
+    if (!isHslArray($hsl)) {
         throw new \InvalidArgumentException("Invalid HSL array format.");
     }
+    $hsl["hue"] = intval($hsl["hue"]);
+    $hsl["sat"] = intval($hsl["sat"]);
+    $hsl["lum"] = intval($hsl["lum"]);
     $hsl["hue"] = (int) max(0, min(360, round($hsl["hue"])));
     $hsl["sat"] = (int) max(0, min(100, round($hsl["sat"])));
     $hsl["lum"] = (int) max(0, min(100, round($hsl["lum"])));
     if (array_key_exists("alpha", $hsl)) {
-        $hsl["alpha"] = max(0, min(1, round($hsl["alpha"] ?? 1, 3)));
+        $hsl["alpha"] = floatval($hsl["alpha"] ?? 1);
+        $hsl["alpha"] = max(0, min(1, round($hsl["alpha"], 3)));
     }
     return $hsl;
 }
