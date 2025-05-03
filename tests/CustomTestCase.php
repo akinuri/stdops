@@ -6,7 +6,17 @@ class CustomTestCase extends TestCase
 {
     public function handleCases(array $cases, callable $callback)
     {
+        $isInIsolation = false;
+        foreach ($cases as $case) {
+            if ($case["isolate"] ?? false) {
+                $isInIsolation = true;
+                break;
+            }
+        }
         foreach ($cases as $key => $case) {
+            if ($isInIsolation && !($case["isolate"] ?? false)) {
+                continue;
+            }
             $caseName = "Case: {$key}";
             if ($case["name"] ?? null) {
                 $caseName .= ", Name: {$case["name"]}";
