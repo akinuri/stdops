@@ -53,7 +53,10 @@ function hslAdd(
     if ($hue !== null)   $hsl["hue"]   += $hue;
     if ($sat !== null)   $hsl["sat"]   += $sat;
     if ($lum !== null)   $hsl["lum"]   += $lum;
-    if ($alpha !== null) $hsl["alpha"] += $alpha;
+    if ($alpha !== null) {
+        $hsl["alpha"] = $hsl["alpha"] ?? 1;
+        $hsl["alpha"] += $alpha;
+    }
     $hsl = hslClamp($hsl);
     return $hsl;
 }
@@ -71,7 +74,10 @@ function hslMul(
     if ($hue !== null)   $hsl["hue"]   *= $hue;
     if ($sat !== null)   $hsl["sat"]   *= $sat;
     if ($lum !== null)   $hsl["lum"]   *= $lum;
-    if ($alpha !== null) $hsl["alpha"] *= $alpha;
+    if ($alpha !== null) {
+        $hsl["alpha"] = $hsl["alpha"] ?? 1;
+        $hsl["alpha"] *= $alpha;
+    }
     $hsl = hslClamp($hsl);
     return $hsl;
 }
