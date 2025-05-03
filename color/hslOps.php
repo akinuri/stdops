@@ -36,7 +36,8 @@ function hslSet(
     if ($sat !== null)   $hsl["sat"]   = $sat;
     if ($lum !== null)   $hsl["lum"]   = $lum;
     if ($alpha !== null) $hsl["alpha"] = $alpha;
-    return hslClamp($hsl);
+    $hsl = hslClamp($hsl);
+    return $hsl;
 }
 
 function hslAdd(
@@ -53,7 +54,8 @@ function hslAdd(
     if ($sat !== null)   $hsl["sat"]   += $sat;
     if ($lum !== null)   $hsl["lum"]   += $lum;
     if ($alpha !== null) $hsl["alpha"] += $alpha;
-    return hslClamp($hsl);
+    $hsl = hslClamp($hsl);
+    return $hsl;
 }
 
 function hslMul(
@@ -70,7 +72,8 @@ function hslMul(
     if ($sat !== null)   $hsl["sat"]   *= $sat;
     if ($lum !== null)   $hsl["lum"]   *= $lum;
     if ($alpha !== null) $hsl["alpha"] *= $alpha;
-    return hslClamp($hsl);
+    $hsl = hslClamp($hsl);
+    return $hsl;
 }
 
 function hslClamp(array $hsl): array
