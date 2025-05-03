@@ -1,5 +1,27 @@
 <?php
 
+function isValidHslArray(array $hsl): bool
+{
+    if (!isHslArray($hsl)) {
+        return false;
+    }
+    $hsl["hue"] = intval($hsl["hue"]);
+    $hsl["sat"] = intval($hsl["sat"]);
+    $hsl["lum"] = intval($hsl["lum"]);
+    $hsl["alpha"] = floatval($hsl["alpha"] ?? 1);
+    return (0 <= $hsl["hue"] && $hsl["hue"] <= 360)
+        && (0 <= $hsl["sat"] && $hsl["sat"] <= 100)
+        && (0 <= $hsl["lum"] && $hsl["lum"] <= 100)
+        && (0 <= $hsl["alpha"] && $hsl["alpha"] <= 1);
+}
+
+function isHslArray(array $hsl): bool
+{
+    return isset($hsl["hue"])
+        && isset($hsl["sat"])
+        && isset($hsl["lum"]);
+}
+
 function hslSet(
     array $hsl,
     int|null $hue = null,
