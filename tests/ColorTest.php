@@ -332,6 +332,23 @@ final class ColorTest extends CustomTestCase
                     "lum" => 75,
                 ],
             ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "lum" => 35],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 35,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "alpha" => 0.65],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 0.65,
+                ],
+            ],
         ];
         $this->handleCases($cases, "hslSet");
     }
