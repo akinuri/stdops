@@ -29,6 +29,9 @@ function hslSet(
     int|null $lum = null,
     float|null $alpha = null
 ): array {
+    if (!isValidHslArray($hsl)) {
+        throw new \InvalidArgumentException("Invalid HSL array format.");
+    }
     if ($hue !== null)   $hsl["hue"]   = $hue;
     if ($sat !== null)   $hsl["sat"]   = $sat;
     if ($lum !== null)   $hsl["lum"]   = $lum;

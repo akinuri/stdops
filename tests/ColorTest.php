@@ -306,16 +306,16 @@ final class ColorTest extends CustomTestCase
                 "args" => [123],
                 "throws" => TypeError::class,
             ],
-            // [
-            //     "name" => "empty array",
-            //     "args" => [[]],
-            //     "throws" => InvalidArgumentException::class,
-            // ],
-            // [
-            //     "name" => "unexpected array",
-            //     "args" => [["lorem" => "ipsum"]],
-            //     "throws" => InvalidArgumentException::class,
-            // ],
+            [
+                "name" => "empty array",
+                "args" => [[]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "name" => "unexpected array",
+                "args" => [["lorem" => "ipsum"]],
+                "throws" => InvalidArgumentException::class,
+            ],
             [
                 "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "hue" => 45],
                 "expected" => [
