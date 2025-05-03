@@ -361,4 +361,84 @@ final class ColorTest extends CustomTestCase
         ];
         $this->handleCases($cases, "hslSet");
     }
+
+    #[TestDox("hslAdd()")]
+    public function test_hslAdd(): void
+    {
+        $cases = [
+            [
+                "name" => "no arg",
+                "args" => [],
+                "throws" => ArgumentCountError::class,
+            ],
+            [
+                "name" => "invalid arg",
+                "args" => [123],
+                "throws" => TypeError::class,
+            ],
+            [
+                "name" => "empty array",
+                "args" => [[]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "name" => "unexpected array",
+                "args" => [["lorem" => "ipsum"]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "hue" => 30],
+                "expected" => [
+                    "hue" => 150,
+                    "sat" => 50,
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "sat" => 20],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 70,
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "lum" => 15],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 90,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "alpha" => 0.25],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 1,
+                ],
+                // "isolate" => true,
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "alpha" => -0.25],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 0.75,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75, "alpha" => 0.25], "alpha" => 0.25],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 0.5,
+                ],
+            ],
+        ];
+        $this->handleCases($cases, "hslAdd");
+    }
 }
