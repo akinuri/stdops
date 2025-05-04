@@ -63,9 +63,9 @@ function hslAdd(
 
 function hslMul(
     array $hsl,
-    int|null $hue = null,
-    int|null $sat = null,
-    int|null $lum = null,
+    float|null $hue = null,
+    float|null $sat = null,
+    float|null $lum = null,
     float|null $alpha = null
 ): array {
     if (!isValidHslArray($hsl)) {
