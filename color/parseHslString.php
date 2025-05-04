@@ -9,7 +9,7 @@
  * - Legacy: `hsl(120, 100%, 50%)`, `hsla(120, 100%, 50%, 0.5)`
  * - Modern: `hsl(120 100% 50%)`, `hsl(120 100% 50% / 50%)`
  *
- * @param string $hslString The HSL(A) color string to parse.
+ * @param string $hsl The HSL(A) color string to parse.
  * 
  * @return array An associative array containing the parsed HSL(A) components:
  *               - "hue" (int): The hue value (0-360).
@@ -21,25 +21,25 @@
  * @throws \Exception If any of the HSL(A) components are out of their valid ranges.
  * @link https://developer.mozilla.org/en-US/docs/Web/CSS/color_value/hsl
  */
-function parseHslString(string $hslString): array
+function parseHslString(string $hsl): array
 {
-    $isLegacy = str_contains($hslString, ",");
+    $isLegacy = str_contains($hsl, ",");
     validateMatch: {
         if ($isLegacy) {
             $match = preg_match(
                 "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*,\s*(\d+)%?\s*,\s*(\d+)%?(?:\s*,\s*(0|1|0?\.\d+))?\s*\)$/i",
-                $hslString,
+                $hsl,
                 $matches
             );
         } else {
             $match = preg_match(
                 "/^hsl[a]?\(\s*(\d+)(?:deg)?\s*(\d+)%?\s*(\d+)%?\s*(?:\/\s*(\d+)%?)?\s*\)$/i",
-                $hslString,
+                $hsl,
                 $matches
             );
         }
         if (!$match) {
-            throw new \InvalidArgumentException("Invalid HSL color format: $hslString");
+            throw new \InvalidArgumentException("Invalid HSL color format: $hsl");
         }
     }
     $hue = intval($matches[1]);
