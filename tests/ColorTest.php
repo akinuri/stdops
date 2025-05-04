@@ -441,4 +441,100 @@ final class ColorTest extends CustomTestCase
         ];
         $this->handleCases($cases, "hslAdd");
     }
+    
+    #[TestDox("hslMul()")]
+    public function test_hslhslMul(): void
+    {
+        $cases = [
+            [
+                "name" => "no arg",
+                "args" => [],
+                "throws" => ArgumentCountError::class,
+            ],
+            [
+                "name" => "invalid arg",
+                "args" => [123],
+                "throws" => TypeError::class,
+            ],
+            [
+                "name" => "empty array",
+                "args" => [[]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "name" => "unexpected array",
+                "args" => [["lorem" => "ipsum"]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "hue" => 1],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "hue" => 1.11],
+                "expected" => [
+                    "hue" => 133, // 132.2
+                    "sat" => 50,
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "sat" => 1.25],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 62, // 62.5
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "lum" => 1.5],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 100, // 112.5
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "alpha" => 0.5],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 0.5,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75, "alpha" => 0.75], "alpha" => 0.5],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 0.375,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75, "alpha" => 0.25], "alpha" => 0],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 0,
+                ],
+            ],
+            [
+                "args" => ["hsl" => ["hue" => 120, "sat" => 50, "lum" => 75], "alpha" => 2],
+                "expected" => [
+                    "hue" => 120,
+                    "sat" => 50,
+                    "lum" => 75,
+                    "alpha" => 1,
+                ],
+            ],
+        ];
+        $this->handleCases($cases, "hslMul");
+    }
 }
