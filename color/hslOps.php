@@ -99,3 +99,49 @@ function hslClamp(array $hsl): array
     }
     return $hsl;
 }
+
+function hslOps(array $hsl, string ...$ops)
+{
+    if (!isValidHslArray($hsl)) {
+        throw new \InvalidArgumentException("Invalid HSL array format.");
+    }
+    foreach ($ops as $op) {
+        $op = parseHslOp($op);
+        if (!$op) {
+            continue;
+        }
+        if ($op["operator"] == "=") {
+            $args = ["hue" => null, "sat" => null, "lum" => null, "alpha" => null];
+            $args[$op["channel"]] = $op["value"];
+            $hsl = hslSet($hsl, ...$args);
+        } else if (in_array($op["operator"], ["+", "-"])) {
+            $args = ["hue" => null, "sat" => null, "lum" => null, "alpha" => null];
+            if ($op["operator"] == "-") {
+                $op["value"] = -$op["value"];
+            }
+            $args[$op["channel"]] = $op["value"];
+            $hsl = hslAdd($hsl, ...$args);
+        } else if (in_array($op["operator"], ["*", "/"])) {
+            $args = ["hue" => null, "sat" => null, "lum" => null, "alpha" => null];
+            if ($op["operator"] == "/") {
+                $op["value"] = 1 / $op["value"];
+            }
+            $args[$op["channel"]] = $op["value"];
+            $hsl = hslMul($hsl, ...$args);
+        }
+    }
+    $hsl = hslClamp($hsl);
+    return $hsl;
+}
+
+function parseHslOp(string $op): array|null
+{
+    if (preg_match("/^(hue|sat|lum|alpha)\s*([+\-*\/=])\s*(\-?\d+(?:\.\d+)?)/", $op, $matches)) {
+        return [
+            "channel" => $matches[1],
+            "operator" => $matches[2],
+            "value" => floatval($matches[3]),
+        ];
+    }
+    return null;
+}
