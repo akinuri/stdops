@@ -100,7 +100,7 @@ function hslClamp(array $hsl): array
     return $hsl;
 }
 
-function hslOps(array $hsl, string ...$ops)
+function hslOps(array $hsl, string ...$ops): array
 {
     if (!isValidHslArray($hsl)) {
         throw new \InvalidArgumentException("Invalid HSL array format.");
