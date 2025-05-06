@@ -609,4 +609,74 @@ final class ColorTest extends CustomTestCase
         ];
         $this->handleCases($cases, "parseHslOp");
     }
+
+    #[TestDox("hslOps()")]
+    public function test_hslOps(): void
+    {
+        $cases = [
+            [
+                "name" => "no arg",
+                "args" => [],
+                "throws" => ArgumentCountError::class,
+            ],
+            [
+                "name" => "invalid arg",
+                "args" => [""],
+                "throws" => TypeError::class,
+            ],
+            [
+                "name" => "empty array",
+                "args" => [[]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "name" => "invalid array",
+                "args" => [["lorem" => "ipsum"]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "args" => [["hue" => 120, "sat" => 50, "lum" => 75], "hue + 20"],
+                "expected" => [
+                    "hue" => 140,
+                    "sat" => 50,
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => [["hue" => 120, "sat" => 50, "lum" => 75], "hue + 20", "sat - 10"],
+                "expected" => [
+                    "hue" => 140,
+                    "sat" => 40,
+                    "lum" => 75,
+                ],
+            ],
+            [
+                "args" => [["hue" => 120, "sat" => 50, "lum" => 75], "hue + 20", "sat - 10", "lum * 0.5"],
+                "expected" => [
+                    "hue" => 140,
+                    "sat" => 40,
+                    "lum" => 37,
+                ],
+            ],
+            [
+                "args" => [["hue" => 120, "sat" => 50, "lum" => 75], "hue + 20", "sat - 10", "lum * 0.5", "alpha / 2"],
+                "expected" => [
+                    "hue" => 140,
+                    "sat" => 40,
+                    "lum" => 37,
+                    "alpha" => 0.5,
+                ],
+            ],
+            [
+                "args" => [["hue" => 120, "sat" => 50, "lum" => 75], "hue + 20", "sat - 10", "lum * 0.5", "alpha / 2", "hue = 100"],
+                "expected" => [
+                    "hue" => 100,
+                    "sat" => 40,
+                    "lum" => 37,
+                    "alpha" => 0.5,
+                ],
+            ],
+        ];
+        $this->handleCases($cases, "hslOps");
+    }
 }
