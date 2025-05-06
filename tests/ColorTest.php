@@ -441,7 +441,7 @@ final class ColorTest extends CustomTestCase
         ];
         $this->handleCases($cases, "hslAdd");
     }
-    
+
     #[TestDox("hslMul()")]
     public function test_hslhslMul(): void
     {
@@ -536,5 +536,77 @@ final class ColorTest extends CustomTestCase
             ],
         ];
         $this->handleCases($cases, "hslMul");
+    }
+
+    #[TestDox("parseHslOp()")]
+    public function test_parseHslOp(): void
+    {
+        $cases = [
+            [
+                "name" => "no arg",
+                "args" => [],
+                "throws" => ArgumentCountError::class,
+            ],
+            [
+                "name" => "invalid arg",
+                "args" => [[]],
+                "throws" => TypeError::class,
+            ],
+            [
+                "name" => "empty string",
+                "args" => [""],
+                "expected" => null,
+            ],
+            [
+                "name" => "unexpected string",
+                "args" => ["lorem"],
+                "expected" => null,
+            ],
+            [
+                "args" => ["hue + 20"],
+                "expected" => [
+                    "channel" => "hue",
+                    "operator" => "+",
+                    "value" => (float) 20,
+                ],
+            ],
+            [
+                "args" => ["hue+20"],
+                "expected" => [
+                    "channel" => "hue",
+                    "operator" => "+",
+                    "value" => (float) 20,
+                ],
+            ],
+            [
+                "args" => [" hue + 20 "],
+                "expected" => null,
+            ],
+            [
+                "args" => ["sat = 50"],
+                "expected" => [
+                    "channel" => "sat",
+                    "operator" => "=",
+                    "value" => (float) 50,
+                ],
+            ],
+            [
+                "args" => ["lum * 0.5"],
+                "expected" => [
+                    "channel" => "lum",
+                    "operator" => "*",
+                    "value" => 0.5,
+                ],
+            ],
+            [
+                "args" => ["alpha / 2"],
+                "expected" => [
+                    "channel" => "alpha",
+                    "operator" => "/",
+                    "value" => (float) 2,
+                ],
+            ],
+        ];
+        $this->handleCases($cases, "parseHslOp");
     }
 }
