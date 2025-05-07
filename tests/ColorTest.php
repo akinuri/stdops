@@ -679,4 +679,51 @@ final class ColorTest extends CustomTestCase
         ];
         $this->handleCases($cases, "hslOps");
     }
+
+    #[TestDox("hslClamp()")]
+    public function test_hslClamp(): void
+    {
+        $cases = [
+            [
+                "name" => "no arg",
+                "args" => [],
+                "throws" => ArgumentCountError::class,
+            ],
+            [
+                "name" => "invalid arg",
+                "args" => [""],
+                "throws" => TypeError::class,
+            ],
+            [
+                "name" => "empty array",
+                "args" => [[]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "name" => "invalid array",
+                "args" => [["lorem" => "ipsum"]],
+                "throws" => InvalidArgumentException::class,
+            ],
+            [
+                "args" => [["hue" => 420, "sat" => 150, "lum" => 275, "alpha" => 1.5]],
+                "expected" => [
+                    "hue" => 360,
+                    "sat" => 100,
+                    "lum" => 100,
+                    "alpha" => 1,
+                ],
+            ],
+            [
+                "args" => [["hue" => -420, "sat" => -150, "lum" => -275, "alpha" => -1.5]],
+                "expected" => [
+                    "hue" => 0,
+                    "sat" => 0,
+                    "lum" => 0,
+                    "alpha" => 0,
+                ],
+                "isolate" => true,
+            ],
+        ];
+        $this->handleCases($cases, "hslClamp");
+    }
 }
