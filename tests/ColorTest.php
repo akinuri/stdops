@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\Attributes\TestDox;
 
-include __DIR__ . "/../color/parseHslString.php";
-include __DIR__ . "/../color/buildHslString.php";
-include __DIR__ . "/../color/hslOps.php";
+include __DIR__ . "/../color/php/parseHslString.php";
+include __DIR__ . "/../color/php/buildHslString.php";
+include __DIR__ . "/../color/php/hslOps.php";
 
 final class ColorTest extends CustomTestCase
 {
